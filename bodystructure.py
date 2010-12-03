@@ -1,5 +1,5 @@
-'''Parses IMAP fetch BODYSTRUCTURE results and displays messagae partnumbers
-Reference RFC3501
+'''Parses IMAP fetch BODYSTRUCTURE results and displays message partnumbers
+Reference RFC3501 for additional information.
 '''
 __version__ = '''IMAP BODYSTRUCTURE parser v 0.2
 
