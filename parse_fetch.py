@@ -1,7 +1,8 @@
 import bodystructure
 import email.utils, imaplib, re
 
-SIZE_RE = re.compile('RFC822.SIZE (\d+)')
+SIZE_RE = re.compile('RFC822.SIZE\s(\d+)')
+UID_RE = re.compile('UID\s(\d+)')
 ATTACHMENTS_RE = re.compile(r'(?<="name"\s").+?(?=")')
 
 def parse_bodystructure(data):
@@ -35,18 +36,25 @@ def parse_fields(data):
     return dict([ [j.strip() for j in i.split(':', 1) ] 
         for i in data.strip().split('\r\n') ])
 
-def parse_message_id(data):
+def parse_message_num(data):
     '''returns message number'''
     print 'here', data
     return int(data.split(' ', 1)[0])
 
+def parse_uid(data):
+    return int(UID_RE.search(data).group(1))
+
 def parse_rfc822_size(data):
     return int(SIZE_RE.search(data).group(1))
 
-def get_attachment_names(data):
+def parse_attachment_names(data):
     '''return a list of names of all email attachments
     parses from any of the following:
       FETCH BODY
       FETCH BODYSTRUCTURE
     '''
     return ATTACHMENTS_RE.findall(data)
+    
+def parse_email_addr(data):
+  return email.utils.parseaddr(data)
+
