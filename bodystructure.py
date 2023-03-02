@@ -25,12 +25,12 @@ def parse_bodystructure(string):
         sys.stderr.write(mesg + '\n')
         return
     body, parts = (match.group(1), [])
-    if DBUG: print '\nBODY:\n', body
+    if DBUG: print ('\nBODY:\n', body)
     for multipart_subtype, depth, text in parse_parts(string):
-        if DBUG: print '{0}\n'.format(pformat((multipart_subtype, depth, text)))
+        if DBUG: print ('{0}\n'.format(pformat((multipart_subtype, depth, text))))
         if multipart_subtype:
             i = len(parts) - 1
-            while (i >= 0) and (depth < parts[i]): i -= 1
+            while (i >= 0) and (depth < parts[i][0]): i -= 1
             parts.insert(i + 1, (depth - 1, multipart_subtype))
         if CONTENT_TYPE_RE.match(text):
             parts.append((depth, text))
@@ -51,7 +51,7 @@ def parse_parts(string):
             yield (multipart_subtype, depth, text)
 
 def add_part_nums(parts):
-    if DBUG: print '\nPARTS:\n{0}\n'.format(pformat(parts))
+    if DBUG: print ('\nPARTS:\n{0}\n'.format(pformat(parts)))
     result = []
     partnums = [0] * max(parts)[0]
     get_part_str = lambda x, y, z: '{0}{1}{2}{3}'.format(
@@ -71,7 +71,7 @@ if __name__ == '__main__':
     parts = parse_bodystructure(body)
     if parts:
         for i in parts:
-            print i
+            print (i)
 
 """Sample Output:
 MULTIPART/MIXED
